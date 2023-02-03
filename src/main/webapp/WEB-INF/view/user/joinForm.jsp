@@ -8,7 +8,7 @@
                     <div class="d-flex form-group mb-2">
                         <input type="text" name="username" class="form-control" placeholder="Enter username"
                             id="username">
-                        <button type="button" class="badge bg-secondary ms-2">중복확인</button>
+                        <button type="button" onclick="sameCheck()" class="badge bg-secondary ms-2">중복확인</button>
                     </div>
 
                     <div class="form-group mb-2">
@@ -31,10 +31,35 @@
             </div>
         </div>
 
-        <%-- <script>
-            function valid() {
-                alert("회원가입 유효성 검사");
-            }
-        </script> --%>
+        <script>
+            let submitCheck = false;
+
+                function valid() {
+                    if (submitCheck) {
+                        return true;
+                    } else {
+                        alert("유저네임 중복체크를 해주세요");
+                        return false;
+                    }
+                }
+            function sameCheck() {
+                    let username = $("#username").val();
+
+                    $.ajax({
+                        type: "get",
+                        url: "/user/usernameSameCheck?username=" + username
+                    }).done((res) => {
+                        //console.log(res);
+                        if (res.data === true) {
+                            alert(res.msg);
+                            submitCheck = true;
+                        } else {
+                            alert(res.msg);
+                            submitCheck = false;
+                        }
+                    }).fail((err) => {
+                    });
+                }
+        </script>
 
         <%@ include file="../layout/footer.jsp" %>
