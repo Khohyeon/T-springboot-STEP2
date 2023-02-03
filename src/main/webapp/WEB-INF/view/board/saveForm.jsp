@@ -3,7 +3,7 @@
     <%@ include file="../layout/header.jsp" %>
 
         <div class="container my-3">
-            <form action="/board" method="post" class="mb-1">
+            <form action="/board/list" method="post" class="mb-1">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Enter title" name="title" id="title">
                 </div>
