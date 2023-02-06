@@ -6,14 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import shop.mtcoding.blog.dto.user.UserReq.JoinReqDto;
 import shop.mtcoding.blog.dto.user.UserReq.LoginReqDto;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.User;
 import shop.mtcoding.blog.service.UserService;
-import shop.mtcoding.blog.util.Script;
 
 @Controller
 public class UserController {
@@ -26,7 +24,6 @@ public class UserController {
 
     @PostMapping("/join")
     public String join(JoinReqDto joinReqDto) {
-
         if (joinReqDto.getUsername() == null || joinReqDto.getUsername().isEmpty()) {
             throw new CustomException("username을 작성해주세요");
         }
@@ -37,19 +34,11 @@ public class UserController {
             throw new CustomException("email을 작성해주세요");
         }
 
-        int result = userService.회원가입(joinReqDto);
-        if (result != 1) {
-            throw new CustomException("회원가입실패");
-        }
-        return "redirect:/loginForm";
+        userService.회원가입(joinReqDto);
+        return "redirect:/loginForm"; // 302
     }
 
-    @GetMapping("/joinForm")
-    public String joinForm() {
-        return "user/joinForm";
-    }
-
-    @PostMapping("login")
+    @PostMapping("/login")
     public String login(LoginReqDto loginReqDto) {
         if (loginReqDto.getUsername() == null || loginReqDto.getUsername().isEmpty()) {
             throw new CustomException("username을 작성해주세요");
@@ -60,6 +49,11 @@ public class UserController {
         User principal = userService.로그인(loginReqDto);
         session.setAttribute("principal", principal);
         return "redirect:/";
+    }
+
+    @GetMapping("/joinForm")
+    public String joinForm() {
+        return "user/joinForm";
     }
 
     @GetMapping("/loginForm")
@@ -73,9 +67,7 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    @ResponseBody
     public String logout() {
-        session.invalidate();
-        return Script.href("로그아웃이 되었습니다.", "/");
+        return "redirect:/";
     }
 }

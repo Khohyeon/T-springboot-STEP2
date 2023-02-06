@@ -5,25 +5,52 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
+import shop.mtcoding.blog.dto.board.BoardReq.BoardSaveReqDto;
+import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.BoardRepository;
 import shop.mtcoding.blog.model.User;
-import shop.mtcoding.blog.util.Script;
+import shop.mtcoding.blog.service.BoardService;
 
 @Controller
 public class BoardController {
 
     @Autowired
     private BoardRepository boardRepository;
+
     @Autowired
     private HttpSession session;
+
+    @Autowired
+    private BoardService boardService;
+
+    @PostMapping("/board")
+    public String save(BoardSaveReqDto BoardSaveReqDto) {
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            throw new CustomException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
+        }
+        if (BoardSaveReqDto.getTitle() == null || BoardSaveReqDto.getTitle().isEmpty()) {
+            throw new CustomException("title을 작성해주세요");
+        }
+        if (BoardSaveReqDto.getContent() == null || BoardSaveReqDto.getContent().isEmpty()) {
+            throw new CustomException("content를 작성해주세요");
+        }
+        if (BoardSaveReqDto.getTitle().length() > 100) {
+            throw new CustomException("title의 길이가 100자 이하여야 합니다");
+        }
+
+        boardService.글쓰기(BoardSaveReqDto, principal.getId());
+
+        return "redirect:/";
+    }
 
     @GetMapping({ "/", "/board" })
     public String main(Model model) {
@@ -34,24 +61,8 @@ public class BoardController {
         return "board/main";
     }
 
-    @PostMapping("/board/list")
-    @ResponseBody
-    public String board(String title, String content) {
-        int result = boardRepository.insert(title, content);
-        if (result != 1) {
-            return Script.back("글쓰기 실패 다시 확인해주세요.");
-        }
-        return Script.href("글이 등록되었습니다.", "/board");
-    }
-
     @GetMapping("/board/{id}")
-    public String detail(@PathVariable int id, Model model) {
-        // User principal = (User) session.getAttribute("principal");
-        // if (principal.getId() == id) {
-        // return Script.href("권한이없습니다 로그인해주세요.", "/loginForm");
-        // }
-        Board board = boardRepository.findById(id);
-        model.addAttribute("board", board);
+    public String detail(@PathVariable int id) {
         return "board/detail";
     }
 

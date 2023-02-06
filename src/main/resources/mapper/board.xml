@@ -3,11 +3,11 @@
 
 <mapper namespace="shop.mtcoding.blog.model.BoardRepository">
    <insert id="insert">
-      insert into board_tb(title, content, created_at) values(#{title}, #{content}, now()) 
+      insert into board_tb(title, content, user_id, created_at) values(#{title}, #{content}, #{userId}, now()) 
    </insert>
     
    <update id="updateById">
-      update board_tb set username = #{username}, password=#{password}, email = #{email} where id = #{id}
+      update board_tb set title = #{title}, content=#{content} where id = #{id}
    </update>
 
    <select id="findAll" resultType="shop.mtcoding.blog.model.Board">
