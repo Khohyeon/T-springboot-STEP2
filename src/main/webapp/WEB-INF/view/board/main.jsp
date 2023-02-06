@@ -4,15 +4,16 @@
 
         <div class="container my-3">
             <div class="d-flex my-board-box row">
-            <c:forEach items="${boardList}" var="board">
-                <div class="card col-lg-3">
-                    <img class="card-img-top" style="height: 250px;" src="images/profile.png" alt="Card image">
-                    <div class="card-body">
-                        <h4 class="card-title my-text-ellipsis">${board.title}</h4>
-                        <a href="/board/${board.id}" class="btn btn-primary">상세보기</a>
+                <c:forEach items="${boardList}" var="board">
+                    <div class="card col-lg-3">
+                        <img class="card-img-top" style="height: 250px;" src="images/profile.png" alt="Card image">
+                        <div class="card-body">
+                            <div>작성자 : ssar</div>
+                            <h4 class="card-title my-text-ellipsis">${board.title}</h4>
+                            <a href="/board/${board.id}" class="btn btn-primary">상세보기</a>
+                        </div>
                     </div>
-                </div>                                            
-            </c:forEach>
+                </c:forEach>
             </div>
             <ul class="pagination mt-3 d-flex justify-content-center">
                 <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
