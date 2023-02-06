@@ -19,12 +19,13 @@ public class BoardRepositoryTest {
     private BoardRepository boardRepository;
 
     @Test
-    public void findAllWithUser_test() throws Exception {
+    public void findAllWithUser_test(BoardMainRespDto boardMainRespDto) throws Exception {
         // given
         ObjectMapper om = new ObjectMapper();
 
         // when
-        List<BoardMainRespDto> boardMainRespDtos = boardRepository.findAllWithUser();
+        List<BoardMainRespDto> boardMainRespDtos = boardRepository.findAllWithUser(boardMainRespDto.getId(),
+                boardMainRespDto.getUsername(), boardMainRespDto.getTitle());
         System.out.println("테스트 : size : " + boardMainRespDtos.size());
         String responseBody = om.writeValueAsString(boardMainRespDtos);
         System.out.println("테스트 : size : " + responseBody);

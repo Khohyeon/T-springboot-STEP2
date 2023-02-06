@@ -28,4 +28,12 @@
        inner join user_tb ut
           on ut.id = bt.user_id
    </select>
-   </mapper>
+
+   <select id="findOneWithUser" resultType="shop.mtcoding.blog.dto.board.BoardResp$BoardDetailRespDto">
+      select bt.id,ut.username,bt.title,bt.content
+        from board_tb bt
+       inner join user_tb ut
+          on ut.id = bt.user_id
+       where bt.id = #{id}   
+   </select>
+   </mapper> 
