@@ -4,60 +4,67 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import shop.mtcoding.blog.dto.ResponseDto;
+import shop.mtcoding.blog.dto.user.UserReq.JoinReqDto;
+import shop.mtcoding.blog.dto.user.UserReq.LoginReqDto;
+import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.User;
-import shop.mtcoding.blog.model.UserRepository;
+import shop.mtcoding.blog.service.UserService;
 import shop.mtcoding.blog.util.Script;
 
 @Controller
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
+
     @Autowired
     private HttpSession session;
+
+    @PostMapping("/join")
+    public String join(JoinReqDto joinReqDto) {
+
+        if (joinReqDto.getUsername() == null || joinReqDto.getUsername().isEmpty()) {
+            throw new CustomException("username을 작성해주세요");
+        }
+        if (joinReqDto.getPassword() == null || joinReqDto.getPassword().isEmpty()) {
+            throw new CustomException("password를 작성해주세요");
+        }
+        if (joinReqDto.getEmail() == null || joinReqDto.getEmail().isEmpty()) {
+            throw new CustomException("email을 작성해주세요");
+        }
+
+        int result = userService.회원가입(joinReqDto);
+        if (result != 1) {
+            throw new CustomException("회원가입실패");
+        }
+        return "redirect:/loginForm";
+    }
 
     @GetMapping("/joinForm")
     public String joinForm() {
         return "user/joinForm";
     }
 
-    @PostMapping("/join")
-    @ResponseBody
-    public String join(String username, String password, String email) {
-        int result = userRepository.insert(username, password, email);
-        if (result != 1) {
-            return Script.back("회원가입 실패 다시 해주세요");
+    @PostMapping("login")
+    public String login(LoginReqDto loginReqDto) {
+        if (loginReqDto.getUsername() == null || loginReqDto.getUsername().isEmpty()) {
+            throw new CustomException("username을 작성해주세요");
         }
-        return Script.href("/loginForm");
-
+        if (loginReqDto.getPassword() == null || loginReqDto.getPassword().isEmpty()) {
+            throw new CustomException("password를 작성해주세요");
+        }
+        User principal = userService.로그인(loginReqDto);
+        session.setAttribute("principal", principal);
+        return "redirect:/";
     }
 
     @GetMapping("/loginForm")
     public String loginForm() {
         return "user/loginForm";
-    }
-
-    @PostMapping("/login")
-    @ResponseBody
-    public String login(String username, String password, Model model) {
-        User pincipal = userRepository.findByUsernameAndPassword(username, password);
-        if (username == null || username.isEmpty()) {
-            return Script.back("username 입력해주세요.");
-        }
-        if (password == null || password.isEmpty()) {
-            return Script.back("password를 입력해주세요.");
-        }
-        if (pincipal == null) {
-            return Script.back("username 이나 password를 잘못 입력하셨습니다.");
-        }
-        session.setAttribute("pincipal", pincipal);
-        return Script.href("/");
     }
 
     @GetMapping("/user/updateForm")
@@ -70,17 +77,5 @@ public class UserController {
     public String logout() {
         session.invalidate();
         return Script.href("로그아웃이 되었습니다.", "/");
-    }
-
-    @GetMapping("/user/usernameSameCheck")
-    public @ResponseBody ResponseDto<?> check(String username) {
-        if (username == null || username.isEmpty()) {
-            return new ResponseDto<>(-1, "username 쿼리스트링을 전달해주세요..", null);
-        }
-        if (username.equals("ssar")) { // db에 있음
-            return new ResponseDto<>(1, "동일한 username이 존재합니다.", false);
-        } else {
-            return new ResponseDto<>(1, "해당 username으로 회원가입이 가능합니다.", true);
-        }
     }
 }

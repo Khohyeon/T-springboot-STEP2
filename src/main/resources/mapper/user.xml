@@ -22,5 +22,8 @@
       select * from user_tb where username = #{username} and password=#{password}
    </select>
 
+   <select id="findByUsername" resultType="shop.mtcoding.blog.model.User">
+        select * from user_tb where username = #{username}
+    </select> 
 
 </mapper>

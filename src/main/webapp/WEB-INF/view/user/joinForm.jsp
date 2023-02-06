@@ -32,34 +32,34 @@
         </div>
 
         <script>
-            let submitCheck = false;
+            // let submitCheck = false;
 
-                function valid() {
-                    if (submitCheck) {
-                        return true;
-                    } else {
-                        alert("유저네임 중복체크를 해주세요");
-                        return false;
-                    }
-                }
-            function sameCheck() {
-                    let username = $("#username").val();
+            //     function valid() {
+            //         if (submitCheck) {
+            //             return true;
+            //         } else {
+            //             alert("유저네임 중복체크를 해주세요");
+            //             return false;
+            //         }
+            //     }
+            // function sameCheck() {
+            //         let username = $("#username").val();
 
-                    $.ajax({
-                        type: "get",
-                        url: "/user/usernameSameCheck?username=" + username
-                    }).done((res) => {
-                        //console.log(res);
-                        if (res.data === true) {
-                            alert(res.msg);
-                            submitCheck = true;
-                        } else {
-                            alert(res.msg);
-                            submitCheck = false;
-                        }
-                    }).fail((err) => {
-                    });
-                }
+            //         $.ajax({
+            //             type: "get",
+            //             url: "/user/usernameSameCheck?username=" + username
+            //         }).done((res) => {
+            //             //console.log(res);
+            //             if (res.data === true) {
+            //                 alert(res.msg);
+            //                 submitCheck = true;
+            //             } else {
+            //                 alert(res.msg);
+            //                 submitCheck = false;
+            //             }
+            //         }).fail((err) => {
+            //         });
+            //     }
         </script>
 
         <%@ include file="../layout/footer.jsp" %>
