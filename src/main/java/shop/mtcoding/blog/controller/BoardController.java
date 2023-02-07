@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import shop.mtcoding.blog.dto.ResponseDto;
 import shop.mtcoding.blog.dto.board.BoardReq.BoardSaveReqDto;
+import shop.mtcoding.blog.dto.board.BoardReq.BoardUpdateRespDto;
 import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.BoardRepository;
@@ -40,7 +42,7 @@ public class BoardController {
             throw new CustomApiException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
         }
         // db가 없어서 여기서 권한 검사를 할 수 가없다.
-        boardService.게시글삭제(id);
+        boardService.게시글삭제(id, principal.getId());
         return new ResponseEntity<>(new ResponseDto<>(1, "삭제성공", null), HttpStatus.OK);
 
     }
@@ -85,6 +87,20 @@ public class BoardController {
 
     @GetMapping("/board/{id}/updateForm")
     public String updateForm(@PathVariable int id) {
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            throw new CustomException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
+        }
+        return "board/updateForm";
+    }
+
+    @PutMapping("/board/{id}/update")
+    public String update(@PathVariable int id, BoardUpdateRespDto boardUpdateRespDto, Model model) {
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            throw new CustomException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
+        }
+        boardService.게시글수정(id, principal.getId(), boardUpdateRespDto);
         return "board/updateForm";
     }
 }

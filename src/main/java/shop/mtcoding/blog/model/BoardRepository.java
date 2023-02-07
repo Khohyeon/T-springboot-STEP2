@@ -12,8 +12,7 @@ import shop.mtcoding.blog.dto.board.BoardResp.BoardMainRespDto;
 public interface BoardRepository {
         public int insert(@Param("title") String title, @Param("content") String content, @Param("userId") int userId);
 
-        public int updateById(@Param("id") int id, @Param("title") String title, @Param("content") String content,
-                        @Param("userId") int userId);
+        public int updateById(@Param("id") int id, @Param("title") String title, @Param("content") String content);
 
         public int deleteById(int id);
 

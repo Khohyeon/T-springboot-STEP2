@@ -3,23 +3,23 @@
     <%@ include file="../layout/header.jsp" %>
 
         <div class="container my-3">
-                <c:if test="${dto.userId == principal.id}" >
+            <c:if test="${dto.userId == principal.id}">
                 <div class="mb-3">
                     <a href="/board/1/updateForm" class="btn btn-warning">수정</a>
                     <button onclick="deleteById(${dto.id})" class="btn btn-danger">삭제</button>
                 </div>
-                </c:if>
+            </c:if>
 
             <script>
                 function deleteById(id) {
                     $.ajax({
-                        type:"delete",
-                        url:"/board/"+id,
-                        dataType:"json"
-                    }).done((res)=>{    // 20x 일때
+                        type: "delete",
+                        url: "/board/" + id,
+                        dataType: "json"
+                    }).done((res) => {    // 20x 일때
                         alert(res.msg);
-                        location.href="/";
-                    }).fail((err)=>{    // 40x , 50x 일때
+                        location.href = "/";
+                    }).fail((err) => {    // 40x , 50x 일때
                         console.log(err);
                         alert(err.responseJSON.msg);
                     });

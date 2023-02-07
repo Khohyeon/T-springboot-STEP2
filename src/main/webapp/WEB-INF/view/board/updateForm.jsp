@@ -15,11 +15,24 @@
                 </textarea>
                 </div>
             </form>
-            <button type="button" class="btn btn-primary">글수정완료</button>
+            <button onclick="updateById(${dto.id})" type="button" class="btn btn-primary">글수정완료</button>
 
         </div>
 
         <script>
+         function updateById(id) {
+                    $.ajax({
+                        type:"put",
+                        url:"/board/"+id,
+                        dataType:"json"
+                    }).done((res)=>{    // 20x 일때
+                        alert(res.msg);
+                        location.href="/";
+                    }).fail((err)=>{    // 40x , 50x 일때
+                        console.log(err);
+                        alert(err.responseJSON.msg);
+                    });
+                }
             $('.summernote').summernote({
                 tabsize: 2,
                 height: 400
