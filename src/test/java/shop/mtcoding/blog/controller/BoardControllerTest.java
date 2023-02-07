@@ -53,6 +53,27 @@ public class BoardControllerTest {
     }
 
     @Test
+    public void detail_test() throws Exception {
+        // given
+        int id = 1;
+        // when
+        ResultActions resultActions = mvc.perform(
+                get("/board/" + id));
+        Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
+        BoardResp.BoardDetailRespDto dto = (BoardResp.BoardDetailRespDto) map.get("dto");
+        String model = om.writeValueAsString(dto);
+        System.out.println("테스트 : size : " + model);
+
+        // then
+        resultActions.andExpectAll(status().isOk());
+        Assertions.assertThat(status().isOk());
+        assertThat(dto.getUsername()).isEqualTo("ssar");
+        assertThat(dto.getId()).isEqualTo(1);
+        assertThat(dto.getTitle()).isEqualTo("첫 번째 글입니다.");
+
+    }
+
+    @Test
     public void main_test() throws Exception {
         // given
         // when
