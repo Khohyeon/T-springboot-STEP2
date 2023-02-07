@@ -32,9 +32,4 @@ public class BoardService {
 
     }
 
-    public BoardDetailRespDto 상세보기(BoardDetailRespDto boardDetailRespDto) {
-        BoardDetailRespDto baordDetailDto = boardRepository.findOneWithUser(boardDetailRespDto.getId(),
-                boardDetailRespDto.getUsername(), boardDetailRespDto.getTitle(), boardDetailRespDto.getContent());
-        return baordDetailDto;
-    }
 }

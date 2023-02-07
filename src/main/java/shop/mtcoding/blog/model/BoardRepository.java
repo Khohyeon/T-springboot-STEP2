@@ -25,7 +25,6 @@ public interface BoardRepository {
 
         public List<BoardMainRespDto> findAllWithUser();
 
-        public BoardDetailRespDto findOneWithUser(@Param("id") int id, @Param("username") String username,
-                        @Param("title") String title, @Param("content") String content);
+        public BoardDetailRespDto findByIdWithUser(int id);
 
 }

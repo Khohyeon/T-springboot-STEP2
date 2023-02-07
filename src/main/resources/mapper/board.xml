@@ -29,8 +29,8 @@
           on ut.id = bt.user_id
    </select>
 
-   <select id="findOneWithUser" resultType="shop.mtcoding.blog.dto.board.BoardResp$BoardDetailRespDto">
-      select bt.id,ut.username,bt.title,bt.content
+   <select id="findByIdWithUser" resultType="shop.mtcoding.blog.dto.board.BoardResp$BoardDetailRespDto">
+      select bt.id,bt.title,bt.content, bt.user_id,ut.username
         from board_tb bt
        inner join user_tb ut
           on ut.id = bt.user_id

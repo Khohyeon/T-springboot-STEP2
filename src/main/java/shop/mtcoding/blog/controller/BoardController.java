@@ -57,9 +57,8 @@ public class BoardController {
     }
 
     @GetMapping("/board/{id}")
-    public String detail(@PathVariable int id, BoardDetailRespDto boardDetailRespDto, Model model) throws Exception {
-        BoardDetailRespDto boardDetail = boardService.상세보기(boardDetailRespDto);
-        model.addAttribute("boardDetail", boardDetail);
+    public String detail(@PathVariable int id, Model model) throws Exception {
+        model.addAttribute("dto", boardRepository.findByIdWithUser(id));
         return "board/detail";
     }
 

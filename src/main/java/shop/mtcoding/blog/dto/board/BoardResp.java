@@ -19,6 +19,7 @@ public class BoardResp {
         private int id;
         private String username;
         private String title;
+        private int userId;
         private String content;
     }
 }
