@@ -22,6 +22,11 @@ public class UserController {
     @Autowired
     private HttpSession session;
 
+    @GetMapping("/joinForm")
+    public String joinForm() {
+        return "user/joinForm";
+    }
+
     @PostMapping("/join")
     public String join(JoinReqDto joinReqDto) {
         if (joinReqDto.getUsername() == null || joinReqDto.getUsername().isEmpty()) {
@@ -38,6 +43,11 @@ public class UserController {
         return "redirect:/loginForm"; // 302
     }
 
+    @GetMapping("/loginForm")
+    public String loginForm() {
+        return "user/loginForm";
+    }
+
     @PostMapping("/login")
     public String login(LoginReqDto loginReqDto) {
         if (loginReqDto.getUsername() == null || loginReqDto.getUsername().isEmpty()) {
@@ -51,16 +61,6 @@ public class UserController {
         return "redirect:/";
     }
 
-    @GetMapping("/joinForm")
-    public String joinForm() {
-        return "user/joinForm";
-    }
-
-    @GetMapping("/loginForm")
-    public String loginForm() {
-        return "user/loginForm";
-    }
-
     @GetMapping("/user/updateForm")
     public String updateForm() {
         return "user/updateForm";
@@ -68,6 +68,7 @@ public class UserController {
 
     @GetMapping("/logout")
     public String logout() {
+        session.invalidate();
         return "redirect:/";
     }
 }

@@ -10,6 +10,11 @@
       update board_tb set title = #{title}, content=#{content} where id = #{id}
    </update>
 
+   <delete id="deleteById">
+      delete from board_tb where id = #{id}
+   </delete>
+
+
    <select id="findAll" resultType="shop.mtcoding.blog.model.Board">
       select * from board_tb
    </select>

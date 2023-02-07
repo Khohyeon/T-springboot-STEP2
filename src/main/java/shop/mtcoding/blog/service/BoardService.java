@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import shop.mtcoding.blog.dto.board.BoardReq.BoardSaveReqDto;
+import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.BoardRepository;
 
@@ -23,7 +24,14 @@ public class BoardService {
         if (result != 1) {
             throw new CustomException("글쓰기 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
 
+    @Transactional
+    public void 게시글삭제(int id) {
+        int result = boardRepository.deleteById(id);
+        if (result != 1) {
+            throw new CustomApiException("삭제 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
