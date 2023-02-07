@@ -21,14 +21,13 @@ public class BoardRepositoryTest {
     @Test
     public void findAllWithUser_test(BoardMainRespDto boardMainRespDto) throws Exception {
         // given
-        ObjectMapper om = new ObjectMapper();
+        ObjectMapper om = new ObjectMapper(); // Jackson이라는 라이브러리가 들고있음
 
         // when
-        List<BoardMainRespDto> boardMainRespDtos = boardRepository.findAllWithUser(boardMainRespDto.getId(),
-                boardMainRespDto.getUsername(), boardMainRespDto.getTitle());
+        List<BoardMainRespDto> boardMainRespDtos = boardRepository.findAllWithUser();
         System.out.println("테스트 : size : " + boardMainRespDtos.size());
         String responseBody = om.writeValueAsString(boardMainRespDtos);
-        System.out.println("테스트 : size : " + responseBody);
+        System.out.println("테스트 : size : " + responseBody); // JSON VIEW로 TEST 하는 방법
 
         // then
         assertThat(boardMainRespDtos.get(5).getUsername()).isEqualTo("love");

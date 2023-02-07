@@ -23,8 +23,7 @@ public interface BoardRepository {
 
         public List<Board> findList(int id);
 
-        public List<BoardMainRespDto> findAllWithUser(@Param("id") int id, @Param("title") String title,
-                        @Param("username") String username);
+        public List<BoardMainRespDto> findAllWithUser();
 
         public BoardDetailRespDto findOneWithUser(@Param("id") int id, @Param("username") String username,
                         @Param("title") String title, @Param("content") String content);

@@ -15,6 +15,7 @@ import shop.mtcoding.blog.dto.board.BoardResp.BoardMainRespDto;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.BoardRepository;
 
+@Transactional(readOnly = true)
 @Service
 public class BoardService {
 
@@ -28,13 +29,6 @@ public class BoardService {
         if (result != 1) {
             throw new CustomException("글쓰기 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-    }
-
-    public List<BoardMainRespDto> mainByUsername(BoardMainRespDto boardMainRespDto) throws Exception {
-        List<BoardMainRespDto> boardMainRespDtos = boardRepository.findAllWithUser(boardMainRespDto.getId(),
-                boardMainRespDto.getUsername(), boardMainRespDto.getTitle());
-        return boardMainRespDtos;
 
     }
 

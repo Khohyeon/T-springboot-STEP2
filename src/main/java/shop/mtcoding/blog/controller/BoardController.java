@@ -54,12 +54,8 @@ public class BoardController {
     }
 
     @GetMapping({ "/", "/board" })
-    public String main(BoardMainRespDto boardMainRespDto, Model model) throws Exception {
-        User principal = (User) session.getAttribute("principal");
-        model.addAttribute("principal", principal);
-
-        List<BoardMainRespDto> boardMainRespDtos = boardService.mainByUsername(boardMainRespDto);
-        model.addAttribute("boardMainRespDtos", boardMainRespDtos);
+    public String main(Model model) {
+        model.addAttribute("dtos", boardRepository.findAllWithUser());
         return "board/main";
     }
 
