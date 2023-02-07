@@ -46,6 +46,7 @@ public class BoardService {
         }
     }
 
+    @Transactional
     public void 게시글수정(int id, int userId, BoardUpdateRespDto boardUpdateRespDto) {
         Board boardPS = boardRepository.findById(id);
         if (boardPS == null) {
@@ -55,12 +56,9 @@ public class BoardService {
             throw new CustomApiException("해당 게시글을 수정할 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
         try {
-            boardRepository.updateById(boardUpdateRespDto.getId(), boardUpdateRespDto.getTitle(),
-                    boardUpdateRespDto.getContent());
+            boardRepository.updateById(id, boardUpdateRespDto.getTitle(), boardUpdateRespDto.getContent());
         } catch (Exception e) {
             throw new CustomApiException("서버에 일시적인 문제가 생겼습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
-            // 로그를 남겨야 함 (DB or File)
-
         }
 
     }
