@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -23,12 +24,15 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import shop.mtcoding.blog.dto.board.BoardReq.BoardUpdateRespDto;
 import shop.mtcoding.blog.dto.board.BoardResp;
 import shop.mtcoding.blog.model.User;
 
+@Transactional // 메서드 실행 직후에 롤백!
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 public class BoardControllerTest {
@@ -41,8 +45,19 @@ public class BoardControllerTest {
     @Autowired
     private ObjectMapper om;
 
+    // @BeforeAll
+    // public static void 테이블차리기() {
+    // // 테이블 차리기
+    // }
+
+    // @AfterAll
+    // public void teardown() {
+    // // 데이터 지우고, 다시 인서트
+    // }
+
     @BeforeEach // Test 메서드 실행 직전 마다에 호출됨.
     public void setUp() {
+        // 데이터 인서트
         User user = new User();
         user.setId(1);
         user.setUsername("ssar");
@@ -52,6 +67,29 @@ public class BoardControllerTest {
 
         mockSession = new MockHttpSession();
         mockSession.setAttribute("principal", user);
+    }
+
+    @Test
+    public void update_test() throws Exception {
+        // given
+        int id = 1;
+        BoardUpdateRespDto boardUpdateRespDto = new BoardUpdateRespDto();
+        boardUpdateRespDto.setTitle("제목1-수정");
+        boardUpdateRespDto.setContent("내용1-수정");
+
+        String requestBody = om.writeValueAsString(boardUpdateRespDto);
+        System.out.println("테스트 : " + requestBody);
+
+        // when
+        ResultActions resultActions = mvc.perform(
+                put("/board/1/update")
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .session(mockSession));
+
+        // then
+        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(jsonPath("$.code").value(1));
     }
 
     @Test
@@ -135,6 +173,6 @@ public class BoardControllerTest {
                         .session(mockSession));
 
         // then
-        resultActions.andExpect(status().is3xxRedirection());
+        resultActions.andExpect(status().is4xxClientError());
     }
 }

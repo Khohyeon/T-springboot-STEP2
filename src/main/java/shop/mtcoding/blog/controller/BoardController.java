@@ -93,13 +93,20 @@ public class BoardController {
         if (principal == null) {
             throw new CustomException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
         }
-        Board board = boardRepository.findById(id);
-        model.addAttribute("board", board); // 수정해야댐
+        Board boardPS = boardRepository.findById(id);
+        if (boardPS == null) {
+            throw new CustomException("없는 게시글을 수정할 수 없습니다.");
+        }
+        if (boardPS.getUserId() != principal.getId()) {
+            throw new CustomException("해당 게시글을 수정할 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
+        model.addAttribute("board", boardPS); // 수정해야댐
         return "board/updateForm";
     }
 
     @PutMapping("/board/{id}/update")
-    public ResponseEntity<?> update(@PathVariable int id, @RequestBody BoardUpdateRespDto boardUpdateRespDto)
+    public @ResponseBody ResponseEntity<?> update(@PathVariable int id,
+            @RequestBody BoardUpdateRespDto boardUpdateRespDto)
             throws Exception {
         // System.out.println(boardUpdateRespDto.getTitle());
         User principal = (User) session.getAttribute("principal");
@@ -117,7 +124,7 @@ public class BoardController {
             throw new CustomApiException("title의 길이가 100자 이하여야 합니다");
         }
 
-        boardService.게시글수정(id, principal.getId(), boardUpdateRespDto);
+        boardService.게시글수정(id, boardUpdateRespDto, principal.getId());
         return new ResponseEntity<>(new ResponseDto<>(1, "수정성공", null), HttpStatus.OK);
     }
 }
