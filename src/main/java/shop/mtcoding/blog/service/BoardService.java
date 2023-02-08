@@ -17,6 +17,7 @@ import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.BoardRepository;
+import shop.mtcoding.blog.util.Thumbnail;
 
 @Transactional(readOnly = true)
 @Service
@@ -32,17 +33,7 @@ public class BoardService {
     // where 절에 걸리는 파라미터를 앞에 받기
     @Transactional
     public void 글쓰기(BoardSaveReqDto boardSaveReqDto, int userId) {
-        Document doc = Jsoup.parse(boardSaveReqDto.getContent());
-        Elements els = doc.select("img");
-        String thumbnail = "";
-        // System.out.println(els);
-        if (els.size() == 0) {
-            // 임시사진
-            // 디비 섬네일 -> /image/profile.png
-        } else {
-            Element el = els.get(0);
-            thumbnail = el.attr("src");
-        }
+        String thumbnail = Thumbnail.thum(boardSaveReqDto.getContent());
         int result = boardRepository.insert(boardSaveReqDto.getTitle(), boardSaveReqDto.getContent(),
                 thumbnail, userId);
         if (result != 1) {
@@ -77,17 +68,7 @@ public class BoardService {
         if (boardPS.getUserId() != principalId) {
             throw new CustomApiException("해당 게시글을 수정할 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
-        Document doc = Jsoup.parse(boardUpdateRespDto.getContent());
-        Elements els = doc.select("img");
-        String thumbnail = "";
-        // System.out.println(els);
-        if (els.size() == 0) {
-            // 임시사진
-            // 디비 섬네일 -> /image/profile.png
-        } else {
-            Element el = els.get(0);
-            thumbnail = el.attr("src");
-        }
+        String thumbnail = Thumbnail.thum(boardUpdateRespDto.getContent());
 
         int result = boardRepository.updateById(id, boardUpdateRespDto.getTitle(), boardUpdateRespDto.getContent(),
                 thumbnail);
