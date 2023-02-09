@@ -2,10 +2,6 @@ package shop.mtcoding.blog.service;
 
 import javax.servlet.http.HttpSession;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,7 +13,7 @@ import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.BoardRepository;
-import shop.mtcoding.blog.util.Thumbnail;
+import shop.mtcoding.blog.util.HtmlPaser;
 
 @Transactional(readOnly = true)
 @Service
@@ -33,11 +29,12 @@ public class BoardService {
     // where 절에 걸리는 파라미터를 앞에 받기
     @Transactional
     public void 글쓰기(BoardSaveReqDto boardSaveReqDto, int userId) {
-        String thumbnail = Thumbnail.thum(boardSaveReqDto.getContent());
+        String thumbnail = HtmlPaser.getThumnail(boardSaveReqDto.getContent());
+
         int result = boardRepository.insert(boardSaveReqDto.getTitle(), boardSaveReqDto.getContent(),
                 thumbnail, userId);
         if (result != 1) {
-            throw new CustomException("글쓰기 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomApiException("글쓰기 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -68,7 +65,7 @@ public class BoardService {
         if (boardPS.getUserId() != principalId) {
             throw new CustomApiException("해당 게시글을 수정할 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
-        String thumbnail = Thumbnail.thum(boardUpdateRespDto.getContent());
+        String thumbnail = HtmlPaser.getThumnail(boardUpdateRespDto.getContent());
 
         int result = boardRepository.updateById(id, boardUpdateRespDto.getTitle(), boardUpdateRespDto.getContent(),
                 thumbnail);

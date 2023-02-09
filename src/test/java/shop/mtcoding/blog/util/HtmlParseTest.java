@@ -15,6 +15,7 @@ public class HtmlParseTest {
         // System.out.println(doc);
         System.out.println("==================================");
         Elements newsHeadlines = doc.select("#mp-itn b a");
+        // System.out.println(newsHeadlines);
         for (Element headline : newsHeadlines) {
             System.out.println(headline.attr("title"));
             System.out.println(headline.absUrl("href"));
@@ -40,27 +41,6 @@ public class HtmlParseTest {
 
     @Test
     public void parse_test() {
-        String html = "<p>1</p><p><img src=\"data:image/png;base64,iVBORw0KG\"</p>";
-
-        int begin1 = html.indexOf("img");
-        System.out.println(begin1);
-
-        String s1 = html.substring(begin1);
-        System.out.println(s1);
-
-        int begin2 = s1.indexOf("src");
-        String s2 = s1.substring(begin2);
-        System.out.println(s2);
-
-        int begin3 = s2.indexOf("\"");
-        int begin4 = s2.lastIndexOf("\"");
-        System.out.println(begin3);
-        System.out.println(begin4);
-
-    }
-
-    @Test
-    public void parse_test1() {
         String html = "<p>1</p><p><img src=\"data:image/png;base64,iVBORw0KG\"></p>";
         String tag = parseEL(html, "img");
         System.out.println(tag);

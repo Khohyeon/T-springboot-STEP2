@@ -29,7 +29,7 @@
                     url: "/board/" + id + "/update",
                     data: JSON.stringify(data),
                     contentType: 'application/json;charset=UTF-8',
-                    dataType: "json"  // default : 응답의 mime 타입으로 유추힘
+                    dataType: "json"  // default : 응답의 mime 타입으로 유추함
                 }).done((res) => {    // 20x 일때
                     console.log(res);
                     alert(res.msg);
