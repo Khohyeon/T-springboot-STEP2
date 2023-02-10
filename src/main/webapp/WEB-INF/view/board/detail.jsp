@@ -9,23 +9,6 @@
                     <button onclick="deleteById(${dto.id})" class="btn btn-danger">삭제</button>
                 </div>
             </c:if>
-
-            <script>
-                function deleteById(id) {
-                    $.ajax({
-                        type: "delete",
-                        url: "/board/" + id,
-                        dataType: "json"
-                    }).done((res) => {    // 20x 일때
-                        alert(res.msg);
-                        location.href = "/";
-                    }).fail((err) => {    // 40x , 50x 일때
-                        // console.log(err);
-                        alert(err.responseJSON.msg);
-                    });
-                }
-            </script>
-
             <div class="mb-2">
                 글 번호 : <span id="id"><i>${dto.id} </i></span> 작성자 : <span class="me-3"><i>${dto.username}</i></span>
                 <i id="heart" class="fa-regular fa-heart my-xl my-cursor" value="no"></i>
@@ -41,12 +24,13 @@
             <hr />
 
             <div class="card">
-                <form>
+                <form action="/reply" method="post">
+                    <input type="hidden" name="boardId" value="${dto.id}">
                     <div class="card-body">
-                        <textarea id="reply-content" class="form-control" rows="1"></textarea>
+                        <textarea name="comment" id="reply-comment" class="form-control" rows="1"></textarea>
                     </div>
                     <div class="card-footer">
-                        <button type="button" id="btn-reply-save" class="btn btn-primary">등록</button>
+                        <button type="submit" id="btn-reply-save" class="btn btn-primary">등록</button>
                     </div>
                 </form>
             </div>
@@ -64,5 +48,20 @@
                 </ul>
             </div>
         </div>
+        <script>
+            function deleteById(id) {
+                $.ajax({
+                    type: "delete",
+                    url: "/board/" + id,
+                    dataType: "json"
+                }).done((res) => {    // 20x 일때
+                    alert(res.msg);
+                    location.href = "/";
+                }).fail((err) => {    // 40x , 50x 일때
+                    // console.log(err);
+                    alert(err.responseJSON.msg);
+                });
+            }
+        </script>
 
         <%@ include file="../layout/footer.jsp" %>
