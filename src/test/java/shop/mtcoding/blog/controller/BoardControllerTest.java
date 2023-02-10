@@ -130,11 +130,13 @@ public class BoardControllerTest {
         System.out.println("테스트 : size : " + replyListjson);
 
         // then
-        // resultActions.andExpectAll(status().isOk());
-        // Assertions.assertThat(status().isOk());
-        // assertThat(dto.getUsername()).isEqualTo("ssar");
-        // assertThat(dto.getId()).isEqualTo(1);
-        // assertThat(dto.getTitle()).isEqualTo("첫 번째 제목입니다.");
+        resultActions.andExpectAll(status().isOk());
+        Assertions.assertThat(status().isOk());
+        assertThat(boardDto.getUsername()).isEqualTo("ssar");
+        assertThat(boardDto.getId()).isEqualTo(1);
+        assertThat(boardDto.getTitle()).isEqualTo("첫 번째 제목입니다.");
+        assertThat(replyDtos.get(1).getComment()).isEqualTo("세 번째 댓글");
+        assertThat(replyDtos.get(1).getUsername()).isEqualTo("love");
 
     }
 

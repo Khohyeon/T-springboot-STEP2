@@ -3,10 +3,10 @@
     <%@ include file="../layout/header.jsp" %>
 
         <div class="container my-3">
-            <c:if test="${dto.userId == principal.id}">
+            <c:if test="${boardDto.userId == principal.id}">
                 <div class="mb-3">
                     <a href="/board/${boardDto.id}/updateForm" class="btn btn-warning">수정</a>
-                    <button onclick="deleteById(${dto.id})" class="btn btn-danger">삭제</button>
+                    <button onclick="deleteById(${boardDto.id})" class="btn btn-danger">삭제</button>
                 </div>
             </c:if>
             <div class="mb-2">
@@ -38,17 +38,21 @@
             <div class="card">
                 <div class="card-header">댓글 리스트</div>
                 <ul id="reply-box" class="list-group">
-                    <li id="reply-1" class="list-group-item d-flex justify-content-between">
-                        <div>${replyDtos.comment}</div>
+                <c:forEach items="${replyDtos}" var="reply">
+                    <li id="reply-${reply.id}" class="list-group-item d-flex justify-content-between">
+                        <div>${reply.comment}</div>
                         <div class="d-flex">
-                            <div class="font-italic">작성자 : ${replyDtos.username} &nbsp;</div>
-                            <button onClick="replyDelete()" class="badge bg-secondary">삭제</button>
+                            <div class="font-italic">작성자 : ${reply.username} &nbsp;</div>
+                            <button onClick="deleteByReplyId(${reply.id})" class="badge bg-secondary">삭제</button>
                         </div>
                     </li>
+                </c:forEach>
                 </ul>
             </div>
         </div>
         <script>
+            
+
             function deleteById(id) {
                 $.ajax({
                     type: "delete",
