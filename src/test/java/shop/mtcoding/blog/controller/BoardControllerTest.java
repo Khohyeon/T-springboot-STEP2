@@ -130,7 +130,7 @@ public class BoardControllerTest {
         Assertions.assertThat(status().isOk());
         assertThat(dto.getUsername()).isEqualTo("ssar");
         assertThat(dto.getId()).isEqualTo(1);
-        assertThat(dto.getTitle()).isEqualTo("첫 번째 글입니다.");
+        assertThat(dto.getTitle()).isEqualTo("첫 번째 제목입니다.");
 
     }
 
@@ -151,7 +151,7 @@ public class BoardControllerTest {
         Assertions.assertThat(status().isOk());
         assertThat(dtos.size()).isEqualTo(6);
         assertThat(dtos.get(0).getUsername()).isEqualTo("ssar");
-        assertThat(dtos.get(0).getTitle()).isEqualTo("첫 번째 글입니다.");
+        assertThat(dtos.get(0).getTitle()).isEqualTo("첫 번째 제목입니다.");
 
     }
 
