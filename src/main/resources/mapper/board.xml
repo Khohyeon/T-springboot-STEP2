@@ -40,4 +40,6 @@
           on ut.id = bt.user_id
        where bt.id = #{id}   
    </select>
+
+   
    </mapper> 

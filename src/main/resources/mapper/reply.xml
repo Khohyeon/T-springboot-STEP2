@@ -22,5 +22,15 @@
       select * from reply_tb where id = #{id}  
    </select>
 
+   <select id="findByBoardIdWithUser" resultType="shop.mtcoding.blog.dto.reply.ReplyResp$ReplyDetailRespDto">
+      select rt.id, rt. comment, rt.user_id, rt.board_id, ut.username
+      from reply_tb rt
+      inner join user_tb ut
+      on rt.user_id = ut.id
+      where rt.board_id = #{board.id};
+   </select>
+
+   
+
 
    </mapper> 
