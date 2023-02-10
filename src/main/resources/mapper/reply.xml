@@ -3,7 +3,7 @@
 
 <mapper namespace="shop.mtcoding.blog.model.ReplyRepository">
    <insert id="insert">
-      insert into reply_tb(comment, user_id, board_id, created_at) values(#{comment}, #{user_id}, #{board_id}, now()) 
+      insert into reply_tb(comment, board_id, user_id, created_at) values(#{comment}, #{board_id}, #{user_id}, now()) 
    </insert>
     
    <update id="updateById">

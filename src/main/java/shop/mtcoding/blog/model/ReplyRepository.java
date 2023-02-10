@@ -7,8 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface ReplyRepository {
-    public int insert(@Param("comment") String comment, @Param("userId") int userId,
-            @Param("boardId") int boardId);
+    public int insert(@Param("comment") String comment, @Param("boardId") int boardId, @Param("userId") int userId);
 
     public int updateById(@Param("id") int id, @Param("comment") String comment);
 
