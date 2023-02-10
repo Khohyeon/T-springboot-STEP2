@@ -9,5 +9,9 @@ insert into board_tb(title, content, thumbnail, user_id, created_at) values('네
 insert into board_tb(title, content, thumbnail, user_id, created_at) values('다섯 번째 글입니다.','다섯 번째 내용입니다.','/images/dora.png', 2, now()); 
 insert into board_tb(title, content, thumbnail, user_id, created_at) values('여섯 번째 글입니다.','여섯 번째 내용입니다.','/images/dora.png', 2, now()); 
 
+insert into reply_tb(comment, user_id, board_id, created_at) values('첫 번째 댓글',1, 1, now()) ;
+insert into reply_tb(comment, user_id, board_id, created_at) values('두 번째 댓글',1, 2, now()) ;
+insert into reply_tb(comment, user_id, board_id, created_at) values('세 번째 댓글',2, 1, now()) ;
+insert into reply_tb(comment, user_id, board_id, created_at) values('네 번째 댓글',2, 2, now()) ;
 commit;
  
