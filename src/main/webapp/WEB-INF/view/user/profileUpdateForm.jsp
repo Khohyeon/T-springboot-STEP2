@@ -32,8 +32,7 @@
             .form-group img {
                 width: 320px;
                 height: 270px;
-                border-radius: 270px;
-
+                border-radius: 50%;
                 margin-bottom: 1rem;
                 border: 1px solid gray;
             }
@@ -45,37 +44,61 @@
         </style>
 
         <div class="container my-3">
-            <h2 class="text-center">프로필 사진 변경</h2>
-            <form action="/user/profileUpdate" method="post" enctype="multipart/form-data">
+            <h2 class="text-center">프로필 사진 변경 페이지</h2>
+            <form id="profileForm" action="/user/profileUpdate" method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                    <img src="/images/dora.png" alt="Current Photo" class="img-fluid" id="imagePreview">
+                    <img src="${user.profile == null ? '/images/dora.png' : user.profile}" alt="Current Photo"
+                        class="img-fluid" id="imagePreview">
                 </div>
                 <div class="form-group">
                     <input type="file" class="form-control" id="profile" name="profile" onchange="chooseImage(this)">
                 </div>
-                <button type="submit" class="btn btn-primary">사진 변경</button>
+                <button type="submit" class="btn btn-primary">사진변경</button>
             </form>
         </div>
 
         <script>
+            function updateImage() {
+                let profileForm = $("#profileForm")[0];
+                let formData = new FormData(profileForm);
+
+                $.ajax({
+                    type: "put",
+                    url: "/user/profileupdate",
+                    data: formData,
+                    contentType: false,  // 필수 : x-www-form-urlencoded로 파싱되는 것을 방지
+                    processData: false,  // 필수 : contentType을 false로 줬을 때 QueryString 자동 설정됨. 해제
+                    enctype: "multipart/form-data",
+                    dataType: "json"  // default : 응답의 mime 타입으로 유추함
+                }).done((res) => {    // 20x 일때
+                    console.log(res);
+                    alert(res.msg);
+                    location.href = "/";
+                }).fail((err) => {    // 40x , 50x 일때
+                    console.log(err);
+                    alert(err.responseJSON.msg);
+                });
+            }
+
             function chooseImage(obj) {
-                // console.log(obj);
-                // console.log(obj.files);
+                //console.log(obj);
+                //console.log(obj.files);
                 let f = obj.files[0];
-                // console.log(obj.files[0]);
-                alert("사진이 변경됨")
+
+                if (!f.type.match("image.*")) {
+                    alert("이미지를 등록해야 합니다.");
+                    return;
+                }
 
                 let reader = new FileReader();
-                // 받아온 파일을 읽어준다
                 reader.readAsDataURL(f);
 
-                // onload: 콜스택이 다 비워지고, 이벤트 루프로 가서 readAsDataURL 이벤트가 끝이 나면 콜백 시켜주는 함수
-                // 자바는 인터페이스를 이자리에 등록을 해서 익명을 사용하지만  여기선 함수를 넣어준다.
+                // 콜스택이 다 비워지고, 이벤트 루프로 가서 readAsDataURL 이벤트가 끝나면 콜백시켜주는 함수
                 reader.onload = function (e) {
                     console.log(e);
                     console.log(e.target.result);
                     $("#imagePreview").attr("src", e.target.result);
-                };
+                }
             }
         </script>
 
