@@ -39,4 +39,7 @@ public class UserService {
         return principal;
     }
 
+    public void 프로필사진추가() {
+    }
+
 }
