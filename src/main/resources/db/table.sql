@@ -3,6 +3,7 @@ create table user_tb(
     username varchar not null unique,
     password varchar not null,
     email varchar not null,
+    profile varchar,
     created_at timestamp 
 );
 create table board_tb(

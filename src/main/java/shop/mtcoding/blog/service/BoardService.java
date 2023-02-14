@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.mtcoding.blog.dto.board.BoardReq.BoardSaveReqDto;
 import shop.mtcoding.blog.dto.board.BoardReq.BoardUpdateRespDto;
 import shop.mtcoding.blog.handler.ex.CustomApiException;
-import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.BoardRepository;
 import shop.mtcoding.blog.util.HtmlPaser;
