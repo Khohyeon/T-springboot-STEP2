@@ -8,11 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import shop.mtcoding.blog.dto.user.UserReq.JoinReqDto;
 import shop.mtcoding.blog.dto.user.UserReq.LoginReqDto;
+import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.User;
 import shop.mtcoding.blog.model.UserRepository;
@@ -44,6 +44,25 @@ public class UserController {
         User userPs = userRepository.findById(principal.getId());
         model.addAttribute("user", userPs);
         return "user/profileUpdateForm";
+    }
+
+    @PutMapping("/user/profileUpdate")
+    public String profileUpdatePut(MultipartFile profile) {
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            return "redirect:/loginForm";
+        }
+
+        if (profile.isEmpty()) {
+            throw new CustomApiException("사진이 전송되지 않았습니다");
+        }
+
+        // 사진이 아니면 ex 터뜨리기
+
+        User userPS = userService.프로필사진수정1(profile, principal.getId());
+        session.setAttribute("principal", userPS);
+
+        return "redirect:/";
     }
 
     @PostMapping("/user/profileUpdate")
@@ -95,7 +114,12 @@ public class UserController {
             throw new CustomException("password를 작성해주세요");
         }
         User principal = userService.로그인(loginReqDto);
+        // session.setAttribute("role", principal);
         session.setAttribute("principal", principal);
+
+        if (principal.getRole().equals("ADMIN")) {
+            return "redirect:/admin";
+        }
         return "redirect:/";
     }
 

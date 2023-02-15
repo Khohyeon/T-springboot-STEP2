@@ -45,6 +45,20 @@
 
         <div class="container my-3">
             <h2 class="text-center">프로필 사진 변경 페이지</h2>
+
+            <form id="profileForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <img src="${user.profile == null ? '/images/dora.png' : user.profile}" alt="Current Photo"
+                        class="img-fluid" id="imagePreview">
+                </div>
+                <div class="form-group">
+                    <input type="file" class="form-control" id="profile" name="profile" onchange="chooseImage(this)">
+                </div>
+                <button onclick="updateImage()" type="submit" class="btn btn-primary">사진변경</button>
+            </form>
+        </div>
+        <!-- <div class="container my-3">
+            <h2 class="text-center">프로필 사진 변경 페이지</h2>
             <form id="profileForm" action="/user/profileUpdate" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <img src="${user.profile == null ? '/images/dora.png' : user.profile}" alt="Current Photo"
@@ -55,7 +69,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary">사진변경</button>
             </form>
-        </div>
+        </div> -->
 
         <script>
             function updateImage() {
@@ -64,14 +78,14 @@
 
                 $.ajax({
                     type: "put",
-                    url: "/user/profileupdate",
+                    url: "/user/profileUpdate",
                     data: formData,
                     contentType: false,  // 필수 : x-www-form-urlencoded로 파싱되는 것을 방지
                     processData: false,  // 필수 : contentType을 false로 줬을 때 QueryString 자동 설정됨. 해제
                     enctype: "multipart/form-data",
                     dataType: "json"  // default : 응답의 mime 타입으로 유추함
                 }).done((res) => {    // 20x 일때
-                    console.log(res);
+                    // console.log(res);
                     alert(res.msg);
                     location.href = "/";
                 }).fail((err) => {    // 40x , 50x 일때
@@ -89,14 +103,16 @@
                     alert("이미지를 등록해야 합니다.");
                     return;
                 }
+                else {
+                }
 
                 let reader = new FileReader();
                 reader.readAsDataURL(f);
 
                 // 콜스택이 다 비워지고, 이벤트 루프로 가서 readAsDataURL 이벤트가 끝나면 콜백시켜주는 함수
                 reader.onload = function (e) {
-                    console.log(e);
-                    console.log(e.target.result);
+                    // console.log(e);
+                    // console.log(e.target.result);
                     $("#imagePreview").attr("src", e.target.result);
                 }
             }

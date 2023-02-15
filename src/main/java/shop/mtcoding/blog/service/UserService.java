@@ -1,12 +1,8 @@
 package shop.mtcoding.blog.service;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,6 +49,19 @@ public class UserService {
     public User 프로필사진수정(MultipartFile profile, int pricipalId) {
         // 1번 사진을 /static/image에 UUID로 변경해서 저장
         String uuidImageName = PathUtil.writeImageFile(profile);
+
+        // 2번 저장된 파일의 경로를 DB에 저장
+        User userPS = userRepository.findById(pricipalId);
+        userPS.setProfile(uuidImageName);
+        userRepository.updateById(userPS.getId(), userPS.getUsername(), userPS.getPassword(), userPS.getEmail(),
+                userPS.getProfile(), userPS.getCreatedAt());
+        return userPS;
+    }
+
+    @Transactional
+    public User 프로필사진수정1(MultipartFile profile, int pricipalId) {
+        // 1번 사진을 /static/image에 UUID로 변경해서 저장
+        String uuidImageName = PathUtil.writeImageFile1(profile);
 
         // 2번 저장된 파일의 경로를 DB에 저장
         User userPS = userRepository.findById(pricipalId);

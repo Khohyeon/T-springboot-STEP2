@@ -4,6 +4,7 @@ create table user_tb(
     password varchar not null,
     email varchar not null,
     profile varchar,
+    role varchar default USER, 
     created_at timestamp 
 );
 create table board_tb(

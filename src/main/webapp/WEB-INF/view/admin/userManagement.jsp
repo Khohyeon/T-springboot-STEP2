@@ -1,0 +1,36 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+    <%@ include file="../layout/header.jsp" %>
+
+        <div class="container my-3">
+            <div class="d-flex my-board-box row">
+                <table border="1">
+                    <tr>
+                        <th>id</th>
+                        <th>username</th>
+                        <th>password</th>
+                        <th>email</th>
+                        <th>profile</th>
+                        <th>createdAt</th>
+                </table>
+                </tr>
+                <c:forEach items="${boardList}" var="board">
+                    <table border="1">
+                        <tr>
+                            <td>${board.id}</td>
+                            <td>${board.username}</td>
+                            <td>${board.password}</td>
+                            <td>${board.email}</td>
+                            <td>${board.profile}</td>
+                            <td>${board.createdAt}</td>
+                        </tr>
+                    </table>
+                </c:forEach>
+            </div>
+            <ul class="pagination mt-3 d-flex justify-content-center">
+                <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            </ul>
+        </div>
+
+        <%@ include file="../layout/footer.jsp" %>
