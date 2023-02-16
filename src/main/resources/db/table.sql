@@ -22,3 +22,9 @@ create table reply_tb(
     board_id int not null,
     created_at timestamp
 );
+create table like_tb(
+	id int AUTO_INCREMENT PRIMARY KEY not null,
+    boardNum bigint,
+    userNum bigint,
+    likeNum int
+);

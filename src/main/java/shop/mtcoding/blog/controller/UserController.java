@@ -3,13 +3,19 @@ package shop.mtcoding.blog.controller;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import shop.mtcoding.blog.dto.ResponseDto;
 import shop.mtcoding.blog.dto.user.UserReq.JoinReqDto;
 import shop.mtcoding.blog.dto.user.UserReq.LoginReqDto;
 import shop.mtcoding.blog.handler.ex.CustomApiException;
@@ -29,6 +35,18 @@ public class UserController {
 
     @Autowired
     private HttpSession session;
+
+    @DeleteMapping("/user/{id}")
+    public @ResponseBody ResponseEntity<?> delete(@PathVariable int id) { // responsebody를 붙이면 데이터를 응답한다.
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            throw new CustomApiException("인증이 되지 않았습니다", HttpStatus.UNAUTHORIZED);
+        }
+        // db가 없어서 여기서 권한 검사를 할 수 가없다.
+        userService.회원삭제(id, principal.getId());
+        return new ResponseEntity<>(new ResponseDto<>(1, "삭제성공", null), HttpStatus.OK);
+
+    }
 
     @GetMapping("/joinForm")
     public String joinForm() {

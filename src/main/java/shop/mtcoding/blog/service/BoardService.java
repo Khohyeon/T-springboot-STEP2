@@ -43,9 +43,9 @@ public class BoardService {
         if (boardPS == null) {
             throw new CustomApiException("없는 게시글을 삭제할 수 없습니다.");
         }
-        if (boardPS.getUserId() != userId) {
-            throw new CustomApiException("해당 게시글을 삭제할 권한이 없습니다.", HttpStatus.FORBIDDEN);
-        }
+        // if (boardPS.getUserId() != userId) {
+        // throw new CustomApiException("해당 게시글을 삭제할 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        // }
         try {
             boardRepository.deleteById(id);
         } catch (Exception e) {

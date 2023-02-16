@@ -39,9 +39,9 @@ public class ReplyService {
         if (replyPS == null) {
             throw new CustomApiException("없는 게시글을 삭제할 수 없습니다.");
         }
-        if (replyPS.getUserId() != userId) {
-            throw new CustomApiException("해당 게시글을 삭제할 권한이 없습니다.", HttpStatus.FORBIDDEN);
-        }
+        // if (replyPS.getUserId() != userId) {
+        // throw new CustomApiException("해당 게시글을 삭제할 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        // }
         try {
             replyRepository.deleteById(id);
         } catch (Exception e) {
