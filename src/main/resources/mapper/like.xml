@@ -3,7 +3,15 @@
 
 <mapper namespace="shop.mtcoding.blog.model.LikeRepository">
 
-<select id="findLike" resultType="int">
-		select count(*) from vegan_like where board_no = #{board_no} and user_no = #{user_no}
-	</select>
+  <select id="findAll" resultType="shop.mtcoding.blog.model.Like">
+    select * from like_tb
+  </select>
+
+  <insert id="insert">
+      insert into like_tb(user_id, board_id, likeNum) VALUES (#{userId}, #{boardId}, #{likeNum});
+   </insert>
+    
+	<delete id="deleteById">
+	  delete form like_tb where user_id = 1 and board_id = 1;
+	</delete>
 </mapper>

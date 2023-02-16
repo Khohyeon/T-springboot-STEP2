@@ -51,7 +51,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="/logout">로그아웃</a>
                             </li>
-                            
+                            <li class="nav-item">
+                                <a class="nav-link" href="/board/searchForm">검색</a>
+                            </li>
                                </c:otherwise>
                             </c:choose>
                             

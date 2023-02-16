@@ -22,6 +22,10 @@
       select * from board_tb where id = #{id}  
    </select>
 
+   <select id="searchByTitle" resultType="shop.mtcoding.blog.model.Board">
+      select * from board_tb where title = #{title}  
+   </select>
+
    <select id="findList" resultType="shop.mtcoding.blog.model.Board">
       select * from board_tb where user_id = #{id}  
    </select>

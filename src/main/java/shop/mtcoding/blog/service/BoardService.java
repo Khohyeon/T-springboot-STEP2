@@ -1,5 +1,7 @@
 package shop.mtcoding.blog.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,13 @@ public class BoardService {
     // 여기서 코드 짜고 util로 옮기기
 
     // where 절에 걸리는 파라미터를 앞에 받기
+
+    @Transactional
+    public List<Board> search(String title) {
+        List<Board> boardList = boardRepository.searchByTitle(title);
+        return boardList;
+    }
+
     @Transactional
     public void 글쓰기(BoardSaveReqDto boardSaveReqDto, int userId) {
         String thumbnail = HtmlPaser.getThumnail(boardSaveReqDto.getContent());

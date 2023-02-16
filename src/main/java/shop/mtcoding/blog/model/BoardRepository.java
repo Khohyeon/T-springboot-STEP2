@@ -22,6 +22,8 @@ public interface BoardRepository {
 
         public Board findById(int id);
 
+        public List<Board> searchByTitle(String title);
+
         public List<Board> findList(int id);
 
         public List<BoardMainRespDto> findAllWithUser();

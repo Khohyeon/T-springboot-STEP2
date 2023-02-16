@@ -24,7 +24,7 @@ create table reply_tb(
 );
 create table like_tb(
 	id int AUTO_INCREMENT PRIMARY KEY not null,
-    boardNum bigint,
-    userNum bigint,
+    board_id int,
+    user_id int,
     likeNum int
 );

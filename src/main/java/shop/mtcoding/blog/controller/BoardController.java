@@ -1,5 +1,7 @@
 package shop.mtcoding.blog.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.BoardRepository;
+import shop.mtcoding.blog.model.LikeRepository;
 import shop.mtcoding.blog.model.ReplyRepository;
 import shop.mtcoding.blog.model.User;
 import shop.mtcoding.blog.service.BoardService;
@@ -36,10 +39,23 @@ public class BoardController {
     private ReplyRepository replyRepository;
 
     @Autowired
+    private LikeRepository likeRepository;
+
+    @Autowired
     private HttpSession session;
 
     @Autowired
     private BoardService boardService;
+
+    @GetMapping("/board/searchForm")
+    public String search(String title, Model model) {
+        List<Board> searchList = boardService.search(title);
+        model.addAttribute("likeList", likeRepository.findAll());
+        model.addAttribute("boardList", boardRepository.findAll());
+        model.addAttribute("searchList", searchList);
+
+        return "board/searchForm";
+    }
 
     @DeleteMapping("/board/{id}")
     public @ResponseBody ResponseEntity<?> delete(@PathVariable int id) { // responsebody를 붙이면 데이터를 응답한다.
