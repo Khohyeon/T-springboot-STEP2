@@ -19,7 +19,16 @@
                     <c:if test="${boardDto.likeNum == 1}">
                    <i id="heart" onclick="likeDeleteClick(${boardDto.id},${principal.id},${boardDto.likeNum})" class="fa-solid fa-heart my-xl my-cursor"></i>
                    </c:if> --%>
-                    <i id="heart" class="fa-regular fa-heart my-xl my-cursor"></i>
+                   <c:choose>
+                      <c:when test="${loveDto == null}">
+                      <i id="heart" class="fa-regular fa-heart my-xl my-cursor" value="no"></i>
+                      </c:when>
+                   
+                      <c:otherwise>
+                      <i id="heart-${loveDto.id}" class="fa-solid fa-heart my-xl my-cursor"></i>
+                      </c:otherwise>
+                   </c:choose>
+                    
             </div>
 
             <div>
@@ -60,16 +69,16 @@
         </div>
        
 
-         <script>
-             $("#heart").click(() => {
+    <script>
+        $("#heart").click(() => {
             let value = $("#heart").val();
             if (value == "ok") {
-                $("#heart").removeClass("fa-solid");
-                $("#heart").val("no");
-            } else {
-                $("#heart").addClass("fa-solid");
-                $("#heart").val("ok");
-            }
+        $("#heart").removeClass("fa-solid");
+        $("#heart").val("no");
+             } else {
+        $("#heart").addClass("fa-solid");
+        $("#heart").val("ok");
+        }
 
         });
     </script>

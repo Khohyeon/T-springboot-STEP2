@@ -32,13 +32,12 @@ import shop.mtcoding.blog.dto.board.BoardReq.BoardSaveReqDto;
 import shop.mtcoding.blog.dto.board.BoardReq.BoardUpdateRespDto;
 import shop.mtcoding.blog.dto.board.BoardResp;
 import shop.mtcoding.blog.dto.reply.ReplyResp;
-import shop.mtcoding.blog.model.Love;
 import shop.mtcoding.blog.model.User;
 
 @Transactional // 메서드 실행 직후에 롤백!
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
-public class BoardControllerTest {
+public class LoveControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -119,15 +118,13 @@ public class BoardControllerTest {
     public void detail_test() throws Exception {
         // given
         int id = 1;
-
         // when
         ResultActions resultActions = mvc.perform(
-                get("/board/" + id).session(mockSession));
+                get("/board/" + id));
         Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
         BoardResp.BoardDetailRespDto boardDto = (BoardResp.BoardDetailRespDto) map.get("boardDto");
         String boardJson = om.writeValueAsString(boardDto);
         List<ReplyResp.ReplyDetailRespDto> replyDtos = (List<ReplyResp.ReplyDetailRespDto>) map.get("replyDtos");
-        Love loveDto = (Love) map.get("loveDto");
         String replyListjson = om.writeValueAsString(replyDtos);
         System.out.println("테스트 : size : " + boardJson);
         System.out.println("테스트 : size : " + replyListjson);
@@ -135,12 +132,11 @@ public class BoardControllerTest {
         // then
         resultActions.andExpectAll(status().isOk());
         Assertions.assertThat(status().isOk());
-        // assertThat(boardDto.getUsername()).isEqualTo("ssar");
-        // assertThat(boardDto.getId()).isEqualTo(1);
-        // assertThat(boardDto.getTitle()).isEqualTo("첫 번째 제목입니다.");
-        // assertThat(replyDtos.get(1).getComment()).isEqualTo("세 번째 댓글");
-        // assertThat(replyDtos.get(1).getUsername()).isEqualTo("love");
-        assertThat(loveDto.getId()).isEqualTo(1);
+        assertThat(boardDto.getUsername()).isEqualTo("ssar");
+        assertThat(boardDto.getId()).isEqualTo(1);
+        assertThat(boardDto.getTitle()).isEqualTo("첫 번째 제목입니다.");
+        assertThat(replyDtos.get(1).getComment()).isEqualTo("세 번째 댓글");
+        assertThat(replyDtos.get(1).getUsername()).isEqualTo("love");
 
     }
 
