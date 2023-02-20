@@ -45,5 +45,15 @@
        where bt.id = #{id}   
    </select>
 
+   <select id="likeCount" resultType="shop.mtcoding.blog.dto.board.BoardResp$BoardLikeCountRespDto">
+      select count(lt.id) as lt_count
+      from board_tb bt left outer join like_tb lt on bt.id = lt.board_id
+      group by bt.id, bt.content;
+  </select>
+
+  <update id="updateByLikeCount">
+      update like_tb set like_count = like_count + 1 where id = {board_id};
+  </update>
+
    
    </mapper> 

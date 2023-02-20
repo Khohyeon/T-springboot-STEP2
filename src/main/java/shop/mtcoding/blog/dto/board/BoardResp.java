@@ -12,6 +12,8 @@ public class BoardResp {
         private String title;
         private String thumbnail;
         private String username;
+        private int likeNum;
+
     }
 
     @Setter
@@ -22,6 +24,18 @@ public class BoardResp {
         private String title;
         private int userId;
         private String content;
+        private int likeNum;
+
+    }
+
+    @Setter
+    @Getter
+    public static class BoardLikeCountRespDto {
+        private int id;
+        private String title;
+        private String thumbnail;
+        private String username;
+        private int likeCount;
     }
 
 }

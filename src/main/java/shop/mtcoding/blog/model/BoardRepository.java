@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import shop.mtcoding.blog.dto.board.BoardResp.BoardDetailRespDto;
+import shop.mtcoding.blog.dto.board.BoardResp.BoardLikeCountRespDto;
 import shop.mtcoding.blog.dto.board.BoardResp.BoardMainRespDto;
 
 @Mapper
@@ -21,6 +22,10 @@ public interface BoardRepository {
         public List<Board> findAll();
 
         public Board findById(int id);
+
+        public Board likeCount(BoardLikeCountRespDto boardlikeCountRespDto);
+
+        public int updateByLikeCount();
 
         public List<Board> searchByTitle(String title);
 

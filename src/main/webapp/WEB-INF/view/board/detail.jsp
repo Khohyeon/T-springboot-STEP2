@@ -11,12 +11,14 @@
             </c:if>
             <div class="mb-2">
                 글 번호 : <span id="id"><i>${boardDto.id} </i></span> 
-                작성자 : <span class="me-3"><i>${boardDto.username}</i></span>
+                작성자 : <span class="me-3"><i>${boardDto.username} </i></span>
                 <%-- heart 현재 false --%>
-                <i id="heart" onclick="likeClick(${boardDto.id},${principal.id})" class="fa-regular fa-heart my-xl my-cursor"></i>
-            <c:if test="${like.likeNum == 1}">  
-                <i id="heart" class="fa-solid fa-heart my-xl my-cursor" value="yes"></i>
-            </c:if>
+                   <c:if test="${boardDto.likeNum != 1}">
+                   <i id="heart" onclick="likeInsertClick(${boardDto.id},${principal.id},${boardDto.likeNum})" class="fa-regular fa-heart my-xl my-cursor"></i>
+                   </c:if>
+                    <c:if test="${boardDto.likeNum == 1}">
+                   <i id="heart" onclick="likeDeleteClick(${boardDto.id},${principal.id},${boardDto.likeNum})" class="fa-solid fa-heart my-xl my-cursor"></i>
+                   </c:if>
             </div>
 
             <div>
@@ -56,14 +58,15 @@
             </div>
         </div>
         <script>
-            
-            function likeClick(id,userId) {
-                data = {
+            function likeInsertClick(id,userId,likeNum) {
+                let data = {
                     boardId: id,
-                    userId: userId
+                    userId: userId,
+                    likeNum: likeNum
                 };
                 console.log(data.boardId);
                 console.log(data.userId);
+                console.log(data.likeNum);
                 $.ajax({
                     type: "post",
                     url: "/like/"+id,
@@ -71,11 +74,29 @@
                     contentType: 'application/json;charset=UTF-8',
                     dataType: "json"  // default : 응답의 mime 타입으로 유추함
                 }).done((res) => {    // 20x 일때
-                    console.log(res);
-                    // this.className = 'fa-solid fa-heart my-xl my-cursor';
+                    // console.log(res);
                     document.getElementById('heart').className = 'fa-solid fa-heart my-xl my-cursor';
-                    // alert(res.msg);
-                    // location.href = "/board/"+id;
+                }).fail((err) => {    // 40x , 50x 일때
+                    console.log(err);
+                    alert(err.responseJSON.msg);
+                });
+            }
+            function likeDeleteClick(id,userId) {
+                let data = {
+                    boardId: id,
+                    userId: userId
+                };
+                console.log(data.boardId);
+                console.log(data.userId);
+                $.ajax({
+                    type: "delete",
+                    url: "/like/"+id,
+                    data: JSON.stringify(data),
+                    contentType: 'application/json;charset=UTF-8',
+                    dataType: "json"  // default : 응답의 mime 타입으로 유추함
+                }).done((res) => {    // 20x 일때
+                    // console.log(res);
+                    document.getElementById('heart').className = 'fa-regular fa-heart my-xl my-cursor';
                 }).fail((err) => {    // 40x , 50x 일때
                     console.log(err);
                     alert(err.responseJSON.msg);

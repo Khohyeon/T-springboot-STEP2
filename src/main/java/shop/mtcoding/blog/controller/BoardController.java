@@ -20,10 +20,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import shop.mtcoding.blog.dto.ResponseDto;
 import shop.mtcoding.blog.dto.board.BoardReq.BoardSaveReqDto;
 import shop.mtcoding.blog.dto.board.BoardReq.BoardUpdateRespDto;
+import shop.mtcoding.blog.dto.board.BoardResp.BoardDetailRespDto;
+import shop.mtcoding.blog.dto.board.BoardResp.BoardLikeCountRespDto;
+import shop.mtcoding.blog.dto.like.LikeReq.LikeReqDto;
 import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.BoardRepository;
+import shop.mtcoding.blog.model.Like;
 import shop.mtcoding.blog.model.LikeRepository;
 import shop.mtcoding.blog.model.ReplyRepository;
 import shop.mtcoding.blog.model.User;
@@ -91,14 +95,27 @@ public class BoardController {
     }
 
     @GetMapping({ "/", "/board" })
-    public String main(Model model) {
+    public String main(Model model, BoardLikeCountRespDto boardlikeCountRespDto) {
+        // model.addAttribute("count",
+        // boardRepository.likeCount(boardlikeCountRespDto));
         model.addAttribute("dtos", boardRepository.findAllWithUser());
         return "board/main";
     }
 
     @GetMapping("/board/{id}")
-    public String detail(@PathVariable int id, Model model) throws Exception {
-        model.addAttribute("boardDto", boardRepository.findByIdWithUser(id));
+    public String detail(@PathVariable int id, Model model, LikeReqDto likeReqDto) throws Exception {
+        User principal = (User) session.getAttribute("principal");
+
+        // likeReqDto.setUserId(principal.getId());
+        likeReqDto.setBoardId(id);
+        BoardDetailRespDto boardDto = boardRepository.findByIdWithUser(id);
+        if (likeReqDto.getUserId() != 0 && likeReqDto.getBoardId() != 0) {
+            boardDto.setLikeNum(1);
+        }
+
+        System.out.println("boardId : " + id + " userId : " + likeReqDto.getUserId()
+                + " likeNum : " + likeReqDto.getLikeNum());
+        model.addAttribute("boardDto", boardDto);
         model.addAttribute("replyDtos", replyRepository.findByBoardIdWithUser(id));
         return "board/detail";
     }

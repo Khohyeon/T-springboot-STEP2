@@ -26,5 +26,5 @@ create table like_tb(
 	id int AUTO_INCREMENT PRIMARY KEY not null,
     board_id int,
     user_id int,
-    likeNum int
+    like_num int
 );

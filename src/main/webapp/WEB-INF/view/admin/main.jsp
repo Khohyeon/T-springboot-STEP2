@@ -80,7 +80,6 @@
         </table>
         </div>
               <div class="tab-pane fade" id="replyCare">
-                <table class="table table-bordered">
             <table class="table table-bordered">
           <thead>
             <tr class="text-center">

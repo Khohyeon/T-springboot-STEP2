@@ -7,11 +7,27 @@
     select * from like_tb
   </select>
 
+  <select id="findAl" resultType="shop.mtcoding.blog.dto.like.LikeReq$LikeReqDto">
+      select * from like_tb
+  </select>
+
   <insert id="insert">
-      insert into like_tb(user_id, board_id, likeNum) VALUES (#{userId}, #{boardId}, #{likeNum});
-   </insert>
+      insert into like_tb(user_id, board_id, like_num) VALUES (#{userId}, #{boardId}, #{likeNum})
+  </insert>
+
+  <select id="findByLikeNum" resultType="shop.mtcoding.blog.model.Like">
+      select * from like_tb where user_id = #{id}  
+  </select>
     
+    <select id="findByUserIdAndBoardId" resultType="shop.mtcoding.blog.model.Like">
+      select * from like_tb where user_id = #{userId} and board_id = #{boardId}  
+  </select>
+
 	<delete id="deleteById">
-	  delete form like_tb where user_id = 1 and board_id = 1;
+	   delete from like_tb where user_id = #{id}
 	</delete>
+
+  
+
+  
 </mapper>
