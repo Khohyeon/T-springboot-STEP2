@@ -12,10 +12,12 @@ insert into board_tb(title, content, thumbnail, user_id, created_at) values('여
 insert into reply_tb(comment, user_id, board_id, created_at) values('첫 번째 댓글',1, 1, now()) ;
 insert into reply_tb(comment, user_id, board_id, created_at) values('두 번째 댓글',1, 2, now()) ;
 insert into reply_tb(comment, user_id, board_id, created_at) values('세 번째 댓글',2, 1, now()) ;
-insert into reply_tb(comment, user_id, board_id, created_at) values('네 번째 댓글',2, 2, now()) ;
 
-insert into like_tb(user_id, board_id, like_num) values(1,1,1);  
-insert into like_tb(user_id, board_id, like_num) values(1,2,1);
-insert into like_tb(user_id, board_id, like_num) values(0,1,0);
+
+insert into love_tb(user_id, board_id, created_at) values(1,1,now());  
+insert into love_tb(user_id, board_id, created_at) values(1,2,now());  
+
+-- insert into like_tb(user_id, board_id, like_num) values(1,2,1);
+-- insert into like_tb(user_id, board_id, like_num) values(0,1,0);
 commit;
  
