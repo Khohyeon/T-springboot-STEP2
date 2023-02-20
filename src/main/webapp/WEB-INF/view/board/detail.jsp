@@ -21,7 +21,7 @@
                     <c:if test="${boardDto.likeNum == 1}">
                    <i id="heart" onclick="likeDeleteClick(${boardDto.id},${principal.id},${boardDto.likeNum})" class="fa-solid fa-heart my-xl my-cursor"></i>
                    </c:if> --%>
-                   <c:choose>
+                    <c:choose>
                       <c:when test="${loveDto == null}">
                       <i id="heart" class="fa-regular fa-heart my-xl my-cursor" value="${loveDto.id}" onclick="loveOrCancle()"></i>
                       </c:when>
@@ -29,7 +29,7 @@
                       <c:otherwise>
                       <i id="heart" class="fa-solid fa-heart my-xl my-cursor" value="${loveDto.id}" onclick="loveOrCancle()"></i>
                       </c:otherwise>
-                   </c:choose>
+                    </c:choose>
                     
             </div>
 
@@ -77,11 +77,11 @@
         function loveOrCancle() {
             let id = $("#heart").attr("value");
             let boardId = $("#boardId").val();
+            console.log(id);
+            console.log(boardId);
 
-            if (id == undefined) {
-                $("#heart").addClass("fa-solid");
-                $("#heart").removeClass("fa-regular");
-
+            if (id == "") {
+               
                 // 좋아요로 통신 요청 (POST)
                 let data = {
                     boardId : boardId
@@ -93,16 +93,15 @@
                     contentType: 'application/json;charset=UTF-8',
                     dataType: "json"
                 }).done((res) => {
-                    alert(res.msg);
                     $("#heart").attr("value",res.data);
-                    location.href = "/";
-                    $("reply-"+id).remove();
+                    $("#heart").addClass("fa-solid");
+                    $("#heart").removeClass("fa-regular");
+
                 }).fail((err) => {
                     
                 });
                 } else {
-                $("#heart").removeClass("fa-solid");
-                $("#heart").addClass("fa-regular");
+                
 
                 // 좋아요 취소로 통신 요청 (DELETE)
 
@@ -110,16 +109,14 @@
                 $.ajax({
                     type: "delete",
                     url: "/love/"+id,
-                    data: JSON.stringify(data),
-                    contentType: 'application/json;charset=UTF-8',
                     dataType: "json"
                 }).done((res) => {
-                    alert(res.msg);
-                    $("#heart").attr("value",undefined);
-                    location.href = "/";
-                    $("reply-"+id).remove();
+                    $("#heart").attr("value","");
+                    $("#heart").removeClass("fa-solid");
+                    $("#heart").addClass("fa-regular");
                 }).fail((err) => {
-                    
+                    alert(err.msg);
+                    console.log(err);
                 });
             }
         }
