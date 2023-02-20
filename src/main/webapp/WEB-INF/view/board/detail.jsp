@@ -2,6 +2,8 @@
 
     <%@ include file="../layout/header.jsp" %>
 
+<input type="hidden" id="boardId" value="${boardDto.id}" />
+
         <div class="container my-3">
             <c:if test="${boardDto.userId == principal.id}">
                 <div class="mb-3">
@@ -21,11 +23,11 @@
                    </c:if> --%>
                    <c:choose>
                       <c:when test="${loveDto == null}">
-                      <i id="heart" class="fa-regular fa-heart my-xl my-cursor" value="no"></i>
+                      <i id="heart" class="fa-regular fa-heart my-xl my-cursor" value="${loveDto.id}" onclick="loveOrCancle()"></i>
                       </c:when>
                    
                       <c:otherwise>
-                      <i id="heart-${loveDto.id}" class="fa-solid fa-heart my-xl my-cursor"></i>
+                      <i id="heart" class="fa-solid fa-heart my-xl my-cursor" value="${loveDto.id}" onclick="loveOrCancle()"></i>
                       </c:otherwise>
                    </c:choose>
                     
@@ -70,17 +72,58 @@
        
 
     <script>
-        $("#heart").click(() => {
-            let value = $("#heart").val();
-            if (value == "ok") {
-        $("#heart").removeClass("fa-solid");
-        $("#heart").val("no");
-             } else {
-        $("#heart").addClass("fa-solid");
-        $("#heart").val("ok");
+
+    // location reload 사용하면 간단하게 해결이 가능하다.
+        function loveOrCancle() {
+            let id = $("#heart").attr("value");
+            let boardId = $("#boardId").val();
+
+            if (id == undefined) {
+                $("#heart").addClass("fa-solid");
+                $("#heart").removeClass("fa-regular");
+
+                // 좋아요로 통신 요청 (POST)
+                let data = {
+                    boardId : boardId
+                }
+                $.ajax({
+                    type: "post",
+                    url: "/love",
+                    data: JSON.stringify(data),
+                    contentType: 'application/json;charset=UTF-8',
+                    dataType: "json"
+                }).done((res) => {
+                    alert(res.msg);
+                    $("#heart").attr("value",res.data);
+                    location.href = "/";
+                    $("reply-"+id).remove();
+                }).fail((err) => {
+                    
+                });
+                } else {
+                $("#heart").removeClass("fa-solid");
+                $("#heart").addClass("fa-regular");
+
+                // 좋아요 취소로 통신 요청 (DELETE)
+
+                
+                $.ajax({
+                    type: "delete",
+                    url: "/love/"+id,
+                    data: JSON.stringify(data),
+                    contentType: 'application/json;charset=UTF-8',
+                    dataType: "json"
+                }).done((res) => {
+                    alert(res.msg);
+                    $("#heart").attr("value",undefined);
+                    location.href = "/";
+                    $("reply-"+id).remove();
+                }).fail((err) => {
+                    
+                });
+            }
         }
 
-        });
     </script>
     <script>
             // function likeInsertClick(id,userId,likeNum) {
